@@ -16,7 +16,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "pretest": "rm -f ./PiButton.jsx && npx plop pi-network-install",
+    "test": "node ./scripts/test-and-cleanup.js",
+    "posttest": "rm -f ./PiButton.jsx",
+    "clean:generated": "rm -f ./PiButton.jsx"
   },
   "dependencies": {
     "pi-sdk-js": "file:../pi-sdk-js",
