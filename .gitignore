@@ -26,3 +26,6 @@ yarn-error.log*
 # swap files
 *.swp
 *.swo
+
+# This file should be generated, but not be part of the package
+PiButton.jsx
