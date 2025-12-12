@@ -1,5 +1,18 @@
 /node_modules/
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
+# test coverage
+**/coverage
+
+# swap files
+*.swp
+*.swo
+
+# Auto-generated, should not ship
+/PiButton.jsx
 # Emacs temporary files
 *~
 \#*
@@ -11,21 +24,6 @@
 # Windows
 Thumbs.db
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # Editor folders/files
-/.vscode
+**/.vscode
 .idea
-
-# test coverage
-/coverage
-
-# swap files
-*.swp
-*.swo
-
-# This file should be generated, but not be part of the package
-PiButton.jsx

@@ -1,5 +1,5 @@
 module.exports = function(plop) {
-  plop.setGenerator('pi-network-install', {
+  plop.setGenerator('pi-sdk:install', {
     description: 'Install the PiButton component (no prompt, always PiButton.jsx)',
     prompts: [],
     actions: [
