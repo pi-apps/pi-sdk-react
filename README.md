@@ -1,102 +1,72 @@
 # pi-sdk-react
 
-A React component library for easily integrating the Pi Network SDK into your React apps.
+`pi-sdk-react` is a React component library designed for seamless Pi Network payments and authentication in any React application. Built atop `pi-sdk-js` (a protocol logic package), it gives developers drop-in buttons, composable components, and full payment flow logic—no server code required for basic usage.
 
-## Overview
+## Purpose
+- Provides ready-to-use React components—like `<PiButton />`—for instant Pi payment integration.
+- Encapsulates the Pi protocol/auth/payment logic using `pi-sdk-js`, so React devs can focus on UI.
+- No backend/server work necessary for the core user experience (connection and buy/payment button).
+- Easily extensible by subclassing or composing SDK-supplied components.
+- Handles all side effects (connecting/authenticating with the Pi Browser) inside the component.
 
-`pi-sdk-react` provides drop-in React components and utilities for connecting with the [Pi Network SDK](https://pi.app/) and implementing Pi payment, authentication, and session flows. Includes both extensible base classes and ready-to-use UI components.
+## Getting Started
 
-## Features
-
-- React component base for Pi Network connectivity and payments
-- Ready-to-use `PiButton` for initiating demo/test payments
-- **Plop.js generator** to create or update the canonical `PiButton.jsx` example any time (see below)
-- Easily extensible for custom payment/auth flows
-
-## Installation
-
-1. **Clone and install dependencies:**
-   ```bash
-   npm install
-   ```
-2. **Ensure `pi-sdk-js` is available locally as a sibling directory.**
-3. **Install React and ReactDOM if your app doesn't already have them:**
-   ```bash
-   npm install react react-dom
-   ```
-
-## Usage
-
-### Using PiButton
-
-1. **Import and use in your React app:**
-   ```jsx
-   import PiButton from './PiButton';
-
-   export default function MyPage() {
-     return (
-       <div>
-         <PiButton />
-       </div>
-     );
-   }
-   ```
-2. **How it works:**
-   - Renders a button, enables when connected to Pi Network.
-   - On click, runs a demo payment (see code in `PiButton.jsx`).
-
-### Regenerating PiButton.jsx with Plop
-
-To always have an up-to-date working PiNetwork button example:
-
-```bash
-npm run pretest
+### 1. Install
 ```
-or manually:
-```bash
-npx plop pi-network-install
-```
-- This will automatically create (or overwrite) `PiButton.jsx` from the project template, providing a working example for your app or to customize.
-
-If tests fail or you want to clean up, use:
-```bash
-npm run clean:generated
+npm install pi-sdk-react
+# or
+yarn add pi-sdk-react
 ```
 
-### Testing
+### 2. Drop in a Buy Button
+```jsx
+import React from "react";
+import PiButton from "pi-sdk-react/PiButton";
 
-- Always run tests with:
-  ```bash
-  npm test
-  ```
-- This will generate `PiButton.jsx`, run the tests, and then remove `PiButton.jsx`.
-- Tests are located in the `tests/` directory and ensure the generated button actually works as intended.
-
----
-
-## Folder Structure
-
+function App() {
+  return (
+    <div>
+      <h1>Pi Payment Demo</h1>
+      <PiButton />
+    </div>
+  );
+}
 ```
-pi-sdk-react/
-  ├── PiSdkComponent.jsx
-  ├── plopfile.js
-  ├── plop-templates/
-  │   └── PiSdkComponentWithBuy.jsx.hbs
-  ├── scripts/
-  │   └── test-and-cleanup.js
-  ├── tests/
-  │   └── PiButton.test.jsx
-  └── ...
+- `<PiButton />` is disabled until authenticated; on login, it enables and runs the full payment flow when clicked.
+
+### 3. Custom Experience: Extend PiSdkComponent
+For more advanced usage, subclass or extend the SDK's base component:
+```jsx
+import React from "react";
+import PiSdkComponent from "pi-sdk-react/PiSdkComponent";
+
+class MyCustomBuyButton extends PiSdkComponent {
+  render() {
+    return (
+      <button disabled={!this.state.connected} onClick={() => this.buy()}>
+        Buy with Pi
+      </button>
+    );
+  }
+}
 ```
+You can also override methods like `onConnection()` or `onApproveSuccess()` for handling each payment or auth step.
 
-## Contributing
+## Core Usage API for React Devs
 
-Contributions and pull requests are welcome. Please file issues or suggestions.
+| Component or Method         | Purpose                                                  |
+|----------------------------|----------------------------------------------------------|
+| `<PiButton />`             | Working Pi buy button, tracks state, handles payment     |
+| `<PiSdkComponent />`       | Extend for your own UI, but benefit from ready logic     |
+| `connected` (state/prop)   | Is user authenticated? (for UI/UX)                       |
+| `user` (state/prop)        | Authenticated Pi user, if available                      |
+| Override methods (class)   | `onConnection`, `onApproveSuccess`, etc.                 |
+| `buy()`                    | Trigger the payment flow programmatically                |
+
+## Summary
+- Zero backend needed for connecting user and launching a Pi payment flow.
+- All Pi protocol details handled for you—just use the components in your React UI.
+- Built for extensibility and custom UI if needed.
 
 ## License
-
-SEE LICENCE IN LICENSE
-
----
-
-**Author:** John Kolen
+This package is available as open source under the terms of the [PiOS License]. See `LICENSE` for details.
