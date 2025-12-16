@@ -8,23 +8,23 @@ jest.mock('pi-sdk-js', () => {
     static log = jest.fn();
     static error = jest.fn();
     static version = '2.0';
-    static get_connected = () => PiSdkBaseMock.connected;
-    static get_user = () => null;
+    static get_connected: () => boolean = () => PiSdkBaseMock.connected;
+    static get_user: () => any = () => null;
     async connect() { PiSdkBaseMock.connected = true; return Promise.resolve(); }
     initializePiSdkBase() {} // Added to fix the test
   };
 });
 
 describe('PiSdkComponent', () => {
-  let piComponent;
+  let piComponent: PiSdkComponent<any,any>;
 
   beforeEach(() => {
     piComponent = new PiSdkComponent({});
   });
 
   it('should initialize the component and bind methods', () => {
-    expect(typeof piComponent.is_connected_to_pi).toBe('function');
-    expect(typeof piComponent.connect).toBe('function');
+    expect(typeof (piComponent as any).is_connected_to_pi).toBe('function');
+    expect(typeof (piComponent as any).connect).toBe('function');
   });
 
   it('should report not connected by default', () => {
@@ -32,7 +32,7 @@ describe('PiSdkComponent', () => {
   });
 
   it('should set connected to true after calling connect', async () => {
-    await piComponent.connect();
+    await (piComponent as any).connect();
     expect(piComponent.is_connected_to_pi()).toBe(true);
   });
 });

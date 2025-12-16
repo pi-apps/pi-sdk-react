@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "pi-sdk-react/PiSdkComponent": ["./PiSdkComponent.tsx"]
+    }
+  },
+  "include": [
+    "./*.ts",
+    "./*.tsx",
+    "src",
+    "tests",
+    "../js-base"
+  ]
+}

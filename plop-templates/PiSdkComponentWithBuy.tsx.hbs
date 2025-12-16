@@ -5,23 +5,31 @@
 import React from 'react';
 import PiSdkComponent from "pi-sdk-react/PiSdkComponent";
 
-export default class {{name}} extends PiSdkComponent {
-  constructor(props) {
+interface {{name}}Props {
+  connected: boolean;
+}
+
+interface {{name}}State {
+  connected: boolean;
+}
+
+export default class {{name}} extends PiSdkComponent<{{name}}Props, {{name}}State> {
+  constructor(props: {{name}}Props) {
     super(props);
     this.state = {
       connected: this.is_connected_to_pi()
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     super.componentDidMount();
   }
 
-  onConnection() {
+  onConnection(): void {
     this.setState({ connected: this.is_connected_to_pi() });
   }
 
-  buy() {
+  buy(): void {
     // Buy logic here (add logging or business logic as needed)
     // Demo purposes, random order id
     const demoOrderId = Math.floor(10000 + Math.random() * 90000);
@@ -33,10 +41,10 @@ export default class {{name}} extends PiSdkComponent {
         order_id: demoOrderId
       }
     };
-    this.createPayment(paymentData);
+    (this as any).createPayment(paymentData);
   }
 
-  render() {
+  render(): React.ReactNode {
     return (
       <button
         disabled={!this.state.connected}
