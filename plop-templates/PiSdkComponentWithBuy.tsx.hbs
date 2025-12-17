@@ -1,39 +1,28 @@
-// ============================================================================
-// Example {{name}} React Component
-// Extends PiSdkComponent for Pi Network flows and UI.
-// ============================================================================
-import React from 'react';
-import PiSdkComponent from "pi-sdk-react/PiSdkComponent";
+// =============================================================================
+// Example {{name}} React Functional Component
+// Integrates Pi Network flows and UI using PiSdkBase (agnostic pattern)
+// =============================================================================
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { PiSdkBase, PaymentData } from "pi-sdk-js";
 
-interface {{name}}Props {
-  connected: boolean;
-}
+export default function {{name}}({ onConnected }: { onConnected?: () => void }) {
+  const [connected, setConnected] = useState(false);
+  const sdkRef = useRef<PiSdkBase | null>(null);
 
-interface {{name}}State {
-  connected: boolean;
-}
-
-export default class {{name}} extends PiSdkComponent<{{name}}Props, {{name}}State> {
-  constructor(props: {{name}}Props) {
-    super(props);
-    this.state = {
-      connected: this.is_connected_to_pi()
+  useEffect(() => {
+    const sdk = new PiSdkBase();
+    sdk.onConnection = () => {
+      setConnected(true);
+      if (onConnected) onConnected();
     };
-  }
+    sdkRef.current = sdk;
+    sdk.connect();
+    // optional: cleanup: () => { sdkRef.current = undefined }
+  }, [onConnected]);
 
-  componentDidMount(): void {
-    super.componentDidMount();
-  }
-
-  onConnection(): void {
-    this.setState({ connected: this.is_connected_to_pi() });
-  }
-
-  buy(): void {
-    // Buy logic here (add logging or business logic as needed)
-    // Demo purposes, random order id
+  const buy = useCallback(() => {
     const demoOrderId = Math.floor(10000 + Math.random() * 90000);
-    const paymentData = {
+    const paymentData: PaymentData = {
       amount: 0.01,
       memo: "ConnecTo-Pi Admission",
       metadata: {
@@ -41,15 +30,13 @@ export default class {{name}} extends PiSdkComponent<{{name}}Props, {{name}}Stat
         order_id: demoOrderId
       }
     };
-    (this as any).createPayment(paymentData);
-  }
+    sdkRef.current?.createPayment(paymentData);
+  }, []);
 
-  render(): React.ReactNode {
-    return (
-      <button
-        disabled={!this.state.connected}
-        onClick={() => this.buy()}
-      >Buy</button>
-    );
-  }
+  return (
+    <button
+      disabled={!connected}
+      onClick={buy}
+    >Buy</button>
+  );
 }
