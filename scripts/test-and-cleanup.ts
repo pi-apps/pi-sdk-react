@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-const { existsSync, unlinkSync } = require('fs');
+import { execSync } from 'child_process';
+import { existsSync, unlinkSync } from 'fs';
 
 let failed = false;
 try {

@@ -1,72 +1,89 @@
-# pi-sdk-react
+# Pi Network React SDK – User Guide
 
-`pi-sdk-react` is a React component library designed for seamless Pi Network payments and authentication in any React application. Built atop `pi-sdk-js` (a protocol logic package), it gives developers drop-in buttons, composable components, and full payment flow logic—no server code required for basic usage.
+This package provides idiomatic React hooks and example components for building apps and integrations on the Pi Network using the browser's `window.Pi` API with TypeScript safety and React ergonomics.
 
-## Purpose
-- Provides ready-to-use React components—like `<PiButton />`—for instant Pi payment integration.
-- Encapsulates the Pi protocol/auth/payment logic using `pi-sdk-js`, so React devs can focus on UI.
-- No backend/server work necessary for the core user experience (connection and buy/payment button).
-- Easily extensible by subclassing or composing SDK-supplied components.
-- Handles all side effects (connecting/authenticating with the Pi Browser) inside the component.
+---
 
-## Getting Started
+## 🚀 Quick Start
 
-### 1. Install
-```
-npm install pi-sdk-react
-# or
-yarn add pi-sdk-react
-```
+1. **Install pi-sdk-react and its peer dependencies**
+   ```sh
+   yarn add pi-sdk-react pi-sdk-js react react-dom
+   # (or npm install ...)
+   ```
 
-### 2. Drop in a Buy Button
-```jsx
-import React from "react";
-import PiButton from "pi-sdk-react/PiButton";
+2. **Ensure the global Pi SDK (`window.Pi`) is available**
+   Add in your main app HTML (e.g., _public/index.html_ or via a script/Head component):
+   ```html
+   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+   ```
+   This is required for all Pi SDK browser integrations.
 
-function App() {
-  return (
-    <div>
-      <h1>Pi Payment Demo</h1>
-      <PiButton />
-    </div>
-  );
-}
-```
-- `<PiButton />` is disabled until authenticated; on login, it enables and runs the full payment flow when clicked.
+3. **Use the hooks and components in your app:**
 
-### 3. Custom Experience: Extend PiSdkComponent
-For more advanced usage, subclass or extend the SDK's base component:
-```jsx
-import React from "react";
-import PiSdkComponent from "pi-sdk-react/PiSdkComponent";
+   ```tsx
+   "use client";
+   import React from 'react';
+   import { usePiConnection, usePiPurchase } from 'pi-sdk-react';
+   import { PaymentData } from 'pi-sdk-js';
 
-class MyCustomBuyButton extends PiSdkComponent {
-  render() {
-    return (
-      <button disabled={!this.state.connected} onClick={() => this.buy()}>
-        Buy with Pi
-      </button>
-    );
-  }
-}
-```
-You can also override methods like `onConnection()` or `onApproveSuccess()` for handling each payment or auth step.
+   const paymentData: PaymentData = {
+     amount: 0.01,
+     memo: 'Buy Coffee',
+     metadata: { orderId: 12345 }
+   };
 
-## Core Usage API for React Devs
+   export function PiButton() {
+     const { connected } = usePiConnection();
+     const purchase = usePiPurchase(paymentData);
+     return (
+       <button disabled={!connected} onClick={purchase}>
+         Buy with Pi
+       </button>
+     );
+   }
+   ```
 
-| Component or Method         | Purpose                                                  |
-|----------------------------|----------------------------------------------------------|
-| `<PiButton />`             | Working Pi buy button, tracks state, handles payment     |
-| `<PiSdkComponent />`       | Extend for your own UI, but benefit from ready logic     |
-| `connected` (state/prop)   | Is user authenticated? (for UI/UX)                       |
-| `user` (state/prop)        | Authenticated Pi user, if available                      |
-| Override methods (class)   | `onConnection`, `onApproveSuccess`, etc.                 |
-| `buy()`                    | Trigger the payment flow programmatically                |
+---
 
-## Summary
-- Zero backend needed for connecting user and launching a Pi payment flow.
-- All Pi protocol details handled for you—just use the components in your React UI.
-- Built for extensibility and custom UI if needed.
+## 📦 API Overview
 
-## License
-This package is available as open source under the terms of the [PiOS License]. See `LICENSE` for details.
+### Hooks
+- **`usePiConnection()`** — Handles Pi authentication, user connection, and exposes `{ connected, user, ready }`. Use this to enable/disable purchase buttons, or to get the current Pi user.
+- **`usePiPurchase(paymentData)`** — Returns a `purchase()` callback that triggers the full Pi payment flow for the specified purchase (amount, memo, and metadata).
+
+### Child SDK – `pi-sdk-js`
+- All Pi Network protocol types (e.g., `PaymentData`, `PiUser`) come from `pi-sdk-js`.
+- For low-level protocol customization (e.g., non-React environments), use `pi-sdk-js` directly.
+
+
+---
+
+## 🔑 Key Details
+- **Peer dependency:** React **must** be installed by the consuming app (peerDependency).
+- **Browser only:** Expects `window.Pi` to be present (via Pi Network browser SDK script tag).
+- **No global bundle**: Must be imported as an ES module.
+- **No extra context provider required** — hooks are self-contained and require no wrapper.
+- **Colocated tests, idiomatic React patterns.**
+
+---
+
+## ❓ FAQ
+
+### Where is the main Pi SDK logic?
+- The low-level Pi JS SDK is provided by [pi-sdk-js](https://github.com/pi-apps/pi-sdk-js), which is a dependency. Do not use `window.Pi` directly in React—use these hooks/components for best results.
+
+### How do I mock/disable Pi for tests or development?
+- Stub or mock `window.Pi` in your test environment to return appropriate values. See [Vitest](https://vitest.dev/) or your test runner's docs.
+
+### Can I use this with Next.js, Vite, CRA, etc?
+- Yes! It is ESM-first and framework-agnostic (but expects a React 18+ or React 19 app as a peer).
+
+---
+
+## 📚 Further Resources
+- [Official Pi SDK Docs](https://developer.minepi.com/)
+- [pi-sdk-js API Reference](https://github.com/pi-apps/pi-sdk-js)
+
+For more advanced use-cases, see the internal documentation or contact the Pi SDK team.
+

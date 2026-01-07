@@ -1,19 +1,6 @@
-/node_modules/
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# test coverage
-**/coverage
-
-# swap files
-*.swp
-*.swo
-
-# Auto-generated, should not ship
-/PiButton.jsx
-# Emacs temporary files
+# Ignore all temporary, build, and node_modules files
+node_modules/
+dist/# Emacs temporary files
 *~
 \#*
 *.elc
