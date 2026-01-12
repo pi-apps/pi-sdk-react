@@ -15,13 +15,14 @@ will not operate without it.** Use one of the back end packages such as
 
 ## 🚀 Quick Start
 
-1. **Install pi-sdk-react and its peer dependencies**
+1. **Install pi-sdk-react:**
    ```sh
-   yarn add pi-sdk-react pi-sdk-js react react-dom
-   # (or npm install ...)
+   yarn add pi-sdk-react
+   # or
+   npm install pi-sdk-react
    ```
 
-2. **Ensure the global Pi SDK (`window.Pi`) is available**
+2. **Ensure the global Pi SDK is available:**
    Add in your main app HTML (e.g., _public/index.html_ or via a script/Head component):
    ```html
    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
@@ -63,6 +64,9 @@ will not operate without it.** Use one of the back end packages such as
      );
    }
    ```
+
+3. **Provide back end transaction support in your app:**
+   as described in the [Official Pi SDK Docs](https://developer.minepi.com/).
 
 ---
 
