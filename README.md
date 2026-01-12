@@ -1,6 +1,15 @@
-# Pi Network React SDK – User Guide
+# Pi Network React SDK – Community Developer Guide
 
 This package provides idiomatic React hooks and example components for building apps and integrations on the Pi Network using the browser's `window.Pi` API with TypeScript safety and React ergonomics.
+It is part of the "Ten Minutes to Transactions" effort described in this
+[video](https://www.youtube.com/watch?v=cIFqf1Z5pRM&t=35s).
+
+** This package only contains the front end interface for initiating and
+completing Pi transations. It does not include back end support and
+will not operate without it. ** Use one of the back end packages such as
+[pi-sdk-nextjs](https://github.com/pi-apps/pi-sdk-nextjs) or
+[pi-sdk-rails](https://github.com/pi-apps/pi-sdk-rails).
+
 
 ---
 
@@ -27,18 +36,29 @@ This package provides idiomatic React hooks and example components for building 
    import { usePiConnection, usePiPurchase } from 'pi-sdk-react';
    import { PaymentData } from 'pi-sdk-js';
 
-   const paymentData: PaymentData = {
+   const defaultPaymentData: PaymentData = {
      amount: 0.01,
-     memo: 'Buy Coffee',
-     metadata: { orderId: 12345 }
+     memo: 'Example Pi Payment',
+     metadata: { productId: 42, description: 'Demo purchase via Pi Network' }
    };
 
-   export function PiButton() {
+   export interface PiButtonProps {
+     paymentData?: PaymentData;
+     onConnected?: () => void;
+     children?: React.ReactNode;
+   }
+
+   export function PiButton({ paymentData = defaultPaymentData, onConnected, children }: PiButtonProps) {
      const { connected } = usePiConnection();
      const purchase = usePiPurchase(paymentData);
+
+     React.useEffect(() => {
+       if (connected && onConnected) onConnected();
+     }, [connected, onConnected]);
+
      return (
        <button disabled={!connected} onClick={purchase}>
-         Buy with Pi
+         {children || 'Buy with Pi'}
        </button>
      );
    }
@@ -86,4 +106,3 @@ This package provides idiomatic React hooks and example components for building 
 - [pi-sdk-js API Reference](https://github.com/pi-apps/pi-sdk-js)
 
 For more advanced use-cases, see the internal documentation or contact the Pi SDK team.
-
