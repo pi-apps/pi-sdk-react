@@ -4,9 +4,9 @@ This package provides idiomatic React hooks and example components for building 
 It is part of the "Ten Minutes to Transactions" effort described in this
 [video](https://www.youtube.com/watch?v=cIFqf1Z5pRM&t=35s).
 
-** This package only contains the front end interface for initiating and
+**This package only contains the front end interface for initiating and
 completing Pi transations. It does not include back end support and
-will not operate without it. ** Use one of the back end packages such as
+will not operate without it.** Use one of the back end packages such as
 [pi-sdk-nextjs](https://github.com/pi-apps/pi-sdk-nextjs) or
 [pi-sdk-rails](https://github.com/pi-apps/pi-sdk-rails).
 
