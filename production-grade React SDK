@@ -1,0 +1,18 @@
+src/
+├── core/
+│   ├── pi-loader.ts
+│   ├── error.ts
+│   └── payment-validator.ts
+├── provider/
+│   └── PiProvider.tsx
+├── hooks/
+│   ├── usePiConnection.ts
+│   ├── usePiAuth.ts
+│   ├── usePiPayment.ts
+│   └── usePiServerHandshake.ts
+├── components/
+│   ├── PiPayButton.tsx
+│   └── PiAuthGuard.tsx
+├── mock/
+│   └── mockPi.ts
+└── index.ts
